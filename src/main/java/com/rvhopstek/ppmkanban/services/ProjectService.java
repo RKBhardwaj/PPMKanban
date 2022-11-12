@@ -1,7 +1,9 @@
 package com.rvhopstek.ppmkanban.services;
 
+import com.rvhopstek.ppmkanban.domain.Backlog;
 import com.rvhopstek.ppmkanban.domain.Project;
 import com.rvhopstek.ppmkanban.exceptions.ProjectIdException;
+import com.rvhopstek.ppmkanban.repositories.BacklogRepository;
 import com.rvhopstek.ppmkanban.repositories.ProjectRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,25 @@ public class ProjectService {
 
   @Autowired
   private ProjectRepository projectRepository;
+  @Autowired
+  private BacklogRepository backlogRepository;
 
   public Project saveOrUpdate(Project project) {
+    String projectIdentifier = project.getProjectIdentifier().toUpperCase();
     try {
-      project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+      project.setProjectIdentifier(projectIdentifier);
+      if (project.getId() == null) {
+        Backlog backlog = new Backlog();
+        project.setBacklog(backlog);
+        backlog.setProject(project);
+        backlog.setProjectIdentifier(projectIdentifier);
+      }
+      if (project.getId() != null) {
+        project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifier));
+      }
       return projectRepository.save(project);
     } catch (Exception e) {
-      throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+      throw new ProjectIdException("Project ID '" + projectIdentifier + "' already exists");
     }
   }
 
