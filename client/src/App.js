@@ -6,27 +6,35 @@ import Header from './component/layout/header';
 import Dashboard from './component/dashboard/dashboard';
 import EditProject from './component/project/editProject';
 import AddProject from './component/project/addProject';
+import ProjectBoard from './component/projectBoard/projectBoard';
+import AddProjectTask from "./component/projectBoard/projectTasks/addProjectTask";
+import UpdateProjectTask from "./component/projectBoard/projectTasks/updateProjectTask";
+import ErrorBoundary from './errorBoundary';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-class App extends React.Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <Router>
-                    <div className="App">
-                        <Header />
+const App = () => {
+    return (
+        <Provider store={store}>
+            <Router forceRefresh={true}>
+                <div className="App">
+                    <Header />
+                    <ErrorBoundary>
                         <Routes>
-                            <Route exact path="/dashboard" element=<Dashboard /> />
-                            <Route exact path="/addProject" element=<AddProject /> />
-                            <Route exact path="/editProject/:id" element=<EditProject/> />
+                            <Route path="/dashboard" element=<Dashboard /> />
+                            <Route path="/addProject" element=<AddProject /> />
+                            <Route path="/editProject/:id" element=<EditProject/> />
+                            <Route path="/projectBoard/:id" element=<ProjectBoard /> />
+                            <Route path="/addProjectTask/:id" element=<AddProjectTask /> />
+                            <Route path="/updateProjectTask/:backlog_id/:project_task_id" element=<UpdateProjectTask /> />
                         </Routes>
-                    </div>
-                </Router>
-            </Provider>
-        );
-    }
+                    </ErrorBoundary>
+                </div>
+            </Router>
+        </Provider>
+    );
 }
 
 export default App;

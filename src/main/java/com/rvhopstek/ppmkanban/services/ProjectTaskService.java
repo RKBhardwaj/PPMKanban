@@ -40,7 +40,7 @@ public class ProjectTaskService {
       projectTask.setProjectSequence(projectIdentifier+"-"+backlogSequence);
       projectTask.setProjectIdentifier(projectIdentifier);
 
-      if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
+      if (projectTask.getPriority() == null || projectTask.getPriority() == 0) {
         projectTask.setPriority(3);
       }
       if (Objects.equals(projectTask.getStatus(), "") || projectTask.getStatus()==null) {
@@ -58,5 +58,39 @@ public class ProjectTaskService {
       throw new ProjectNotFoundException("Project with Id '" + backlog_id + "' doesn\'t exist");
     }
     return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_id);
+  }
+
+  public ProjectTask findByProjectSequence(String backlog_id, String project_task_id) {
+    Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
+    if (backlog == null) {
+      throw new ProjectNotFoundException("Project with Id '" + backlog_id + "' doesn\'t exist");
+    }
+    ProjectTask projectTask = projectTaskRepository.findByProjectSequence(project_task_id);
+    if (projectTask == null) {
+      throw new ProjectNotFoundException("Project Task with Id '" + project_task_id + "' doesn\'t exist");
+    }
+
+    if (!projectTask.getProjectIdentifier().equals(backlog_id)) {
+      throw new ProjectNotFoundException("Project task '"+ project_task_id + "' doesn\'t exist in project '" + backlog_id +"'");
+    }
+
+    return projectTask;
+  }
+
+  public ProjectTask updateByProjectSequence(ProjectTask updatedProjectTask, String backlog_id, String project_task_id) {
+    ProjectTask projectTask1 = this.findByProjectSequence(backlog_id, project_task_id);
+    projectTask1 = updatedProjectTask;
+    return projectTaskRepository.save(projectTask1);
+  }
+
+  public void deleteByProjectSequence(String backlog_id, String project_task_id) {
+    ProjectTask projectTask = this.findByProjectSequence(backlog_id, project_task_id);
+
+//    Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
+//    List<ProjectTask> projectTaskList = backlog.getProjectTaskList();
+//    projectTaskList.remove(projectTask);
+//    backlogRepository.save(backlog);
+
+    projectTaskRepository.delete(projectTask);
   }
 }

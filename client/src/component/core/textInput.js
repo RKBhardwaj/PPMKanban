@@ -12,8 +12,10 @@ const TextInput = ({ label, isDisplayLabel, placeholder, name, value, onChange, 
     const fieldId = `text-input-${name}`
     return (
         <div className="form-group">
-            <label htmlFor={fieldId}>
-                {isDisplayLabel && (<span>{label}</span>)}
+            <div className="mb-3">
+                <label className="form-label" htmlFor={fieldId}>
+                    {isDisplayLabel && (<span>{label}</span>)}
+                </label>
                 <input
                     type="text"
                     id={fieldId}
@@ -25,7 +27,7 @@ const TextInput = ({ label, isDisplayLabel, placeholder, name, value, onChange, 
                     required={isRequired}
                     disabled={isDisabled}
                 />
-            </label>
+            </div>
         </div>
     )
 }

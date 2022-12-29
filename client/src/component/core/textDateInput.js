@@ -12,8 +12,11 @@ const TextDateInput = ({ label, isDisplayLabel, placeholder, name, value, onChan
     const fieldId = `date-field-${name}`
     return (
         <div className="form-group">
-            <label htmlFor={fieldId}>
-                { isDisplayLabel && (<span>{label}</span>) }
+            <div className="mb-3">
+                <label className="form-label" htmlFor={fieldId}>
+                    { isDisplayLabel && (<span>{label}</span>) }
+
+                </label>
                 <input
                     id={fieldId}
                     type="date"
@@ -23,7 +26,7 @@ const TextDateInput = ({ label, isDisplayLabel, placeholder, name, value, onChan
                     value={value}
                     onChange={onChange}
                 />
-            </label>
+            </div>
         </div>
     )
 }

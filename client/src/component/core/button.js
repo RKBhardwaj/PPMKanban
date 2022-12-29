@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import utils from "./utils";
 
-const Button = ({children, type, isDisabled, onClick, isPrimary}) => {
+const Button = ({children, type, isDisabled, onClick, isPrimary, isLink}) => {
     const classNames = utils.getClassNames({
         'btn' : true,
-        'btn-primary' : isPrimary,
-        'btn-secondary': !isPrimary
+        'btn-primary' : isPrimary && !isLink,
+        'btn-secondary': !isPrimary && !isLink,
+        'btn-link p-0': isLink
     })
     return (
         <button
@@ -27,11 +28,13 @@ Button.propTypes = {
     isDisabled: PropTypes.bool,
     isPrimary: PropTypes.bool,
     onClick: PropTypes.func,
+    isLink: PropTypes.bool
 }
 Button.defaultProps = {
     type: 'button',
     isDisabled: false,
-    isPrimary: true
+    isPrimary: true,
+    isLink: false
 }
 
 export default Button
